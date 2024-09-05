@@ -37,9 +37,8 @@ impl DTState<f32, AutoDevice, SnakeConfig> for SnakeBoard {
         }
     }
 
-    fn to_tensor(&self) -> Tensor<(Const<{ Self::STATE_SIZE }>,), f32, AutoDevice> {
-        let dev: AutoDevice = Default::default();
-        let mut t: Tensor<(Const<{ Self::STATE_SIZE }>,), f32, AutoDevice> = dev.zeros();
+    fn to_tensor(&self) -> Tensor<(Const<{ Self::STATE_SIZE }>,), f32, AutoDevice>{
+        let mut t: Tensor<(Const<{ Self::STATE_SIZE }>,), f32, Cpu> = Cpu::default().zeros();
         t = t - 1.0;
         for (i, row) in self.board.iter().enumerate() {
             for (j, x) in row.iter().enumerate() {
@@ -53,7 +52,8 @@ impl DTState<f32, AutoDevice, SnakeConfig> for SnakeBoard {
         t[[{ BOARD_SIZE * BOARD_SIZE + 2 }]] = self.apple.0 as f32;
         t[[{ BOARD_SIZE * BOARD_SIZE + 3 }]] = self.apple.1 as f32;
 
-        t
+        let dev: AutoDevice = Default::default();
+        t.to_device(&dev)
     }
 
     fn action_to_index(action: &Self::Action) -> usize {
