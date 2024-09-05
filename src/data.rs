@@ -1,5 +1,5 @@
 use decision_transformer_dfdx::DTState;
-use dfdx::tensor::Cpu;
+use dfdx::tensor::AutoDevice;
 
 use crate::{
     dt_trait::SnakeConfig,
@@ -8,7 +8,7 @@ use crate::{
 
 pub fn play_game_random() -> (
     Vec<SnakeBoard>,
-    Vec<<SnakeBoard as DTState<f32, Cpu, SnakeConfig>>::Action>,
+    Vec<<SnakeBoard as DTState<f32, AutoDevice, SnakeConfig>>::Action>,
 ) {
     let mut states = vec![];
     let mut actions = vec![];
@@ -28,7 +28,7 @@ pub fn play_game_random() -> (
 
 pub fn play_game_up() -> (
     Vec<SnakeBoard>,
-    Vec<<SnakeBoard as DTState<f32, Cpu, SnakeConfig>>::Action>,
+    Vec<<SnakeBoard as DTState<f32, AutoDevice, SnakeConfig>>::Action>,
 ) {
     let mut states = vec![];
     let mut actions = vec![];
@@ -47,7 +47,7 @@ pub fn play_game_up() -> (
 
 pub fn play_game_smart() -> (
     Vec<SnakeBoard>,
-    Vec<<SnakeBoard as DTState<f32, Cpu, SnakeConfig>>::Action>,
+    Vec<<SnakeBoard as DTState<f32, AutoDevice, SnakeConfig>>::Action>,
 ) {
     let mut states = vec![];
     let mut actions = vec![];
@@ -81,7 +81,7 @@ pub fn play_game_smart() -> (
 
 pub fn play_game_well() -> (
     Vec<SnakeBoard>,
-    Vec<<SnakeBoard as DTState<f32, Cpu, SnakeConfig>>::Action>,
+    Vec<<SnakeBoard as DTState<f32, AutoDevice, SnakeConfig>>::Action>,
 ) {
     let mut states = vec![];
     let mut actions = vec![];
@@ -131,7 +131,7 @@ pub fn play_game_well() -> (
 
 pub fn play_game_towards() -> (
     Vec<SnakeBoard>,
-    Vec<<SnakeBoard as DTState<f32, Cpu, SnakeConfig>>::Action>,
+    Vec<<SnakeBoard as DTState<f32, AutoDevice, SnakeConfig>>::Action>,
 ) {
     let mut states = vec![];
     let mut actions = vec![];
