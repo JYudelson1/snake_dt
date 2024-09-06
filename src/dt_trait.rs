@@ -10,8 +10,8 @@ pub struct SnakeConfig;
 
 impl DTModelConfig for SnakeConfig {
     const NUM_ATTENTION_HEADS: usize = 4;
-    const HIDDEN_SIZE: usize = 512;
-    const MLP_INNER: usize = 4 * 512;
+    const HIDDEN_SIZE: usize = 16;
+    const MLP_INNER: usize = 4 * 16;
     const SEQ_LEN: usize = 4;
     const MAX_EPISODES_IN_GAME: usize = 1024;
     const NUM_LAYERS: usize = 4;
@@ -19,7 +19,7 @@ impl DTModelConfig for SnakeConfig {
 
 impl DTState<f32, AutoDevice, SnakeConfig> for SnakeBoard {
     type Action = Moves;
-    const STATE_SIZE: usize = { BOARD_SIZE * BOARD_SIZE + 4 };
+    const STATE_SIZE: usize = {7 * BOARD_SIZE * BOARD_SIZE} + 4 ;
     const ACTION_SIZE: usize = 4;
 
     fn apply_action(&mut self, action: Self::Action) {
@@ -33,17 +33,23 @@ impl DTState<f32, AutoDevice, SnakeConfig> for SnakeBoard {
         if new.points > self.points {
             1.0
         } else {
-            0.0
+            let old_distance = (self.snake_head.0 as f32 - self.apple.0 as f32).abs()
+            + (self.snake_head.1 as f32 - self.apple.1 as f32).abs();
+
+            let new_distance = (new.snake_head.0 as f32 - new.apple.0 as f32).abs()
+            + (new.snake_head.1 as f32 - new.apple.1 as f32).abs();
+            
+
+            0.1 * (old_distance - new_distance)
         }
     }
 
     fn to_tensor(&self) -> Tensor<(Const<{ Self::STATE_SIZE }>,), f32, AutoDevice>{
         let mut t: Tensor<(Const<{ Self::STATE_SIZE }>,), f32, Cpu> = Cpu::default().zeros();
-        t = t - 1.0;
         for (i, row) in self.board.iter().enumerate() {
             for (j, x) in row.iter().enumerate() {
-                let pos = j + (row.len() * i);
-                t[[pos]] = x.to_usize() as f32;
+                let pos = 7 * (j + (row.len() * i));
+                t[[pos + x.to_usize()]] = 1.0;
             }
         }
 
