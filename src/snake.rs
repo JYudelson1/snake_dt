@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use rand::Rng;
 
-pub const BOARD_SIZE: usize = 8;
+pub const BOARD_SIZE: usize = 3;
 
 #[derive(Debug, Clone, Copy)]
 pub enum Cell {
