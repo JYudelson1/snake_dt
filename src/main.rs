@@ -72,11 +72,11 @@ fn main() {
 
     let mut rng = rand::prelude::StdRng::from_seed([42; 32]);
     for i in 0..2_i32.pow(20) {
-        let (batch, actions, mask) = SnakeBoard::get_batch::<1024, _>(&mut rng, Some(256));
+        let (batch, actions) = SnakeBoard::get_batch::<1024, _>(&mut rng, Some(256));
 
         let mut prev_loss = f32::MAX;
         for epoch in 0..8 {
-            let loss = model.train_on_batch(batch.clone(), actions, mask, &mut optimizer);
+            let loss = model.train_on_batch(batch.clone(), actions, &mut optimizer);
             println!("Loss at batch {i} epoch {epoch}: {loss:.3} (offline learn)\r");
 
             // Early stopping
@@ -87,7 +87,7 @@ fn main() {
             }
         }
 
-        if (i - 1) % 128 == 0 {
+        if (i - 1) % 32 == 0 {
             println!("Attempting to achieve 0 points:");
             model.evaluate(SnakeBoard::new_random(), temp, 0.0, true);
             println!("Attempting to achieve 2 points:");
